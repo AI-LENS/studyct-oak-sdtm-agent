@@ -178,6 +178,7 @@ Respond with a structured json output in the following format:
 chain = (
     get_sdtm_target_variables
     >> OpenAiLLM(structure=SDTMTargetVariable)
+    >> get_sdtm_target_codelists
     >> get_codelist_terms
     >> OpenAiLLM(structure=AllCodelistAssociation)
 )
