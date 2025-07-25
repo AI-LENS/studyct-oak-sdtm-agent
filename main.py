@@ -137,12 +137,14 @@ async def get_sdtm_target_codelists(
     msg: Message, csd: HandlerChain
 ) -> Message:
     sdtm_target: SDTMTargetVariable = msg.info["structure"]
+    print(f"{sdtm_target=}")
     target_variable = sdtm_target.target_variable
     sdtm_col_codelist = datasets["VS"]["variables"][target_variable]["codelists"]
     # print(raw_collections)
     codelist_terms = [
         c["name"] for c in codelists[sdtm_col_codelist[0]]["terms"].values()
     ]
+    csd.variables["codelist_terms"] = codelist_terms
     return Message("", info={"codelist_terms": codelist_terms})
 
 
@@ -170,7 +172,7 @@ Respond with a structured json output in the following format:
 ```
 """.format(
         raw_data_points=", ".join(csd.variables["raw_data_points"]),
-        codelist_terms="\n".join(msg.info["codelist_terms"]),
+        codelist_terms="\n".join(csd.variables["codelist_terms"]),
     )
     return prompt
 
@@ -185,7 +187,7 @@ chain = (
 
 
 async def get_association(data: pd.DataFrame, colname: str):
-    raw_data_points = list(data[colname].notnull().unique())
+    raw_data_points = list(data[colname].dropna().unique())
     res = await chain.run(
         Message(colname), variables={"raw_data_points": raw_data_points}
     )
@@ -193,6 +195,10 @@ async def get_association(data: pd.DataFrame, colname: str):
 
 
 df = pd.read_csv("./data/raw/VS.csv")
+
+df["TEMP_VSLOC"] = df["TEMP_VSLOC"].map({"ORAL CAVITY": "Oral Cavity", "EAR": "ears"}) # change collected values intentionally
+print(df["TEMP_VSLOC"].unique())
+
 res: AllCodelistAssociation = asyncio.run(get_association(df, "TEMP_VSLOC"))
 for assoc in res.associations:
     print(f"Raw Data Code: {assoc.raw_data_code}, Codelist Term: {assoc.codelist_term}")
