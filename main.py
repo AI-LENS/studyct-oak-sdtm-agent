@@ -186,8 +186,8 @@ chain = (
 )
 
 
-async def get_association(data: pd.DataFrame, colname: str):
-    raw_data_points = list(data[colname].dropna().unique())
+async def get_association(raw_data: pd.DataFrame, colname: str):
+    raw_data_points = list(raw_data[colname].dropna().unique())
     res = await chain.run(
         Message(colname), variables={"raw_data_points": raw_data_points}
     )
