@@ -1,6 +1,6 @@
-# SDTM Codelist Association Demo
+# Study CT creation
 
-This project demonstrates an automated approach to map raw clinical data values to their corresponding CDISC SDTM codelist terms using AI-powered analysis.
+This project demonstrates an automated approach to map raw clinical data values to their corresponding CDISC SDTM codelist terms using AI-powered analysis required for sdtm.oak library in R.
 
 ## Overview
 
