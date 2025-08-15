@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import re
 import unicodedata
 from typing import TypedDict
@@ -8,6 +9,12 @@ import pandas as pd
 from conflux import HandlerChain, Message, handler
 from conflux.handlers import OpenAiLLM
 from pydantic import BaseModel
+
+# Explicit OpenAI API key. Replace the placeholder with your key if you don't want to use env vars.
+# WARNING: Avoid committing real keys to source control.
+OPENAI_API_KEY = ""  # e.g., "sk-..."; leave empty to rely on environment
+if OPENAI_API_KEY and "OPENAI_API_KEY" not in os.environ:
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 with open("./data/cdisc_json/sdtmig.json", "r") as file:
     sdtmig = json.load(file)
