@@ -52,3 +52,32 @@ chain = (
 ```
 
 This approach enables automated standardization of clinical data according to CDISC guidelines, reducing manual mapping effort while maintaining compliance with regulatory standards.
+
+## Setup
+
+1. Install uv
+
+```
+pipx install uv
+# or
+python -m pip install uv
+```
+
+2. Configure API key (choose one)
+
+- Option A (simple): edit `main.py` and set `OPENAI_API_KEY = "sk-xxx"` near the top.
+- Option B (env var): set it in your shell before running:
+
+```
+export OPENAI_API_KEY=sk-xxx
+```
+
+3. Run
+
+```
+uv run main.py
+```
+
+### Models
+
+Currently the app uses OpenAI models. Ollama-based local model support will be added soon.
