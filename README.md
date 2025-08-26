@@ -80,4 +80,111 @@ uv run main.py
 
 ### Models
 
-Currently the app uses OpenAI models. Ollama-based local model support will be added soon.
+This app supports both cloud (OpenAI) and local (Ollama) models.
+
+## Local LLM (Ollama) Setup
+
+The project can run fully locally using Ollama and an instruction-tuned model that fits on machines with ~8 GB RAM.
+
+### macOS
+
+1. Install Ollama (choose one):
+
+   - Using Homebrew:
+
+     ```bash
+     brew install ollama
+     ```
+
+   - Using the official install script:
+
+     ```bash
+     curl -fsSL https://ollama.com/install.sh | sh
+     ```
+
+2. Start the Ollama server (if not auto-started):
+
+   ```bash
+   ollama serve
+   ```
+
+3. Pull the recommended model (fits ~8 GB RAM):
+
+   ```bash
+   ollama pull qwen2.5:3b-instruct
+   ```
+
+### Windows
+
+1. Install Ollama via the official Windows installer (from the Ollama website).
+
+2. Ensure the Ollama service is running. If needed, start it from PowerShell:
+
+   ```powershell
+   Start-Process -FilePath "C:\\Program Files\\Ollama\\ollama.exe" -ArgumentList "serve"
+   ```
+
+3. Pull the recommended model:
+
+   ```powershell
+   ollama pull qwen2.5:3b-instruct
+   ```
+
+Notes:
+- If you already run another model server on a different port, set `OLLAMA_BASE_URL` accordingly (default is `http://127.0.0.1:11434`).
+- Qwen 2.5 3B Instruct is instruction-tuned and performs well for this task on CPU.
+
+## Usage
+
+### Cloud (OpenAI)
+
+1. Set the OpenAI API key (either export it or set it in `main.py`):
+
+   ```bash
+   export OPENAI_API_KEY=sk-xxx
+   ```
+
+2. Run:
+
+   ```bash
+   uv run python -u main.py
+   ```
+
+### Local (Ollama)
+
+Make sure the Ollama server is running and the model is pulled (see setup above).
+
+- macOS / Linux:
+
+  ```bash
+  USE_LOCAL_LLM=1 OLLAMA_MODEL=qwen2.5:3b-instruct uv run python -u main.py
+  ```
+
+- Windows PowerShell:
+
+  ```powershell
+  $env:USE_LOCAL_LLM = "1"
+  $env:OLLAMA_MODEL = "qwen2.5:3b-instruct"
+  uv run python -u main.py
+  ```
+
+- Windows cmd:
+
+  ```cmd
+  set USE_LOCAL_LLM=1
+  set OLLAMA_MODEL=qwen2.5:3b-instruct
+  uv run python -u main.py
+  ```
+
+Optional environment variables:
+- `OLLAMA_BASE_URL` (default `http://127.0.0.1:11434`)
+
+## Outputs
+
+- `codelist_mapping_output.csv`: final mapping with columns `collected_value`, `codelist_value`, `sdtm_domain`, `sdtm_variable`.
+
+## Notes on Matching Behavior
+
+- Prematching is strict and lightweight: direct match → case-insensitive → space-insensitive.
+- Only unmatched values are sent to the LLM.
+- Local LLM responses are post-processed to ensure one mapping per input and only valid CT terms are accepted.
