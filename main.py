@@ -481,9 +481,11 @@ async def get_association(raw_data: pd.DataFrame, colname: str):
 
 df = pd.read_csv("./data/raw/VS.csv")
 
-df["TEMP_VSLOC"] = df["TEMP_VSLOC"].map({"ORAL CAVITY": "Oral Cavity", "EAR": "ears"}) # change collected values intentionally
+## changing few values intentionally to check the process (CDASH is already aligned)
+df["TEMP_VSLOC"] = df["TEMP_VSLOC"].map({"ORAL CAVITY": "Oral Cavity", "EAR": "ears"}) 
 print(df["TEMP_VSLOC"].unique())
 
+# we are showing a sample implementation for one variable and this can be extended to domains 
 res, sdtm_variable = asyncio.run(get_association(df, "TEMP_VSLOC"))
 for assoc in res.associations:
     print(f"Raw Data Code: {assoc.raw_data_code}, Codelist Term: {assoc.codelist_term}")
@@ -500,6 +502,6 @@ for assoc in res.associations:
     })
 
 output_df = pd.DataFrame(output_data)
-output_df.to_csv("codelist_mapping_output.csv", index=False)
-print(f"\nOutput saved to codelist_mapping_output.csv with {len(output_data)} mappings")
+output_df.to_csv("studyct.csv", index=False)
+print(f"\nOutput saved to studyct.csv with {len(output_data)} mappings")
 print(f"SDTM Domain: {sdtm_domain}, Variable: {sdtm_variable or 'UNKNOWN'}")
