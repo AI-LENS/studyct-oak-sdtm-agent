@@ -35,7 +35,7 @@ The system performs a two-step AI-assisted mapping process:
 - The `get_codelist_terms` handler receives raw data points and available codelist terms from previous steps
 - Another OpenAI LLM intelligently maps each raw data value to its corresponding standardized codelist term (handles non-exact matches)
 
-**Output**: Structured `AllCodelistAssociation` object containing mappings between raw data codes and their standardized CDISC codelist terms. Additionally, the script writes a CSV `codelist_mapping_output.csv` in the project root with columns: `collected_value`, `codelist_value`, `sdtm_domain`, `sdtm_variable`.
+**Output**: Structured `AllCodelistAssociation` object containing mappings between raw data codes and their standardized CDISC codelist terms. Additionally, the script writes a CSV `studyct.csv` in the project root with columns: `collected_value`, `codelist_value`, `sdtm_domain`, `sdtm_variable`.
 
 ### Implementation Details
 
@@ -181,7 +181,7 @@ Optional environment variables:
 
 ## Outputs
 
-- `codelist_mapping_output.csv`: final mapping with columns `collected_value`, `codelist_value`, `sdtm_domain`, `sdtm_variable`.
+- `studyct.csv`: final mapping with columns `collected_value`, `codelist_value`, `sdtm_domain`, `sdtm_variable`.
 
 ## Notes on Matching Behavior
 
